@@ -1,0 +1,124 @@
+// Simple tic-tac-toe implementation.
+
+@static {
+  create(who) {
+    return who.fromAuthority("2S7PME65H3Y72A5NH020OG12M3XBL");
+  }
+
+  invent(who) {
+    return who.fromAuthority("2S7PME65H3Y72A5NH020OG12M3XBL");
+  }
+}
+
+@connected (who) {
+  return who.fromAuthority("2S7PME65H3Y72A5NH020OG12M3XBL");
+}
+
+// Cells of the board. A list of 9 integers. Cell indices correspond to board
+// positions as follows:
+//
+//  0 | 1 | 2
+// ---+---+---
+//  3 | 4 | 5
+// ---+---+---
+//  6 | 7 | 8
+//
+// The value of board[i] is one of three values:
+//
+//  0: empty space
+//  1: occupied by X
+// -1: occupied by O
+//
+// (I wasn't able to get this to work with an array, so I'm just going to
+// explicitly enumerate all possible fields.)
+public int board0 = 0;
+public int board1 = 0;
+public int board2 = 0;
+public int board3 = 0;
+public int board4 = 0;
+public int board5 = 0;
+public int board6 = 0;
+public int board7 = 0;
+public int board8 = 0;
+
+// Winner of the game. 1 for X, -1 for O, or 0 if there is no winner (yet).
+public int winner = 0;
+
+// Next player. 1 for X, -1 for O, or 0 if the game is over.
+public int nextPlayer = 1;
+
+procedure getBoard(int i) -> int {
+  if (i == 0) return board0;
+  if (i == 1) return board1;
+  if (i == 2) return board2;
+  if (i == 3) return board3;
+  if (i == 4) return board4;
+  if (i == 5) return board5;
+  if (i == 6) return board6;
+  if (i == 7) return board7;
+  if (i == 8) return board8;
+  return 0;
+}
+
+procedure setBoard(int i, int v) {
+  if (i == 0) board0 = v; else
+  if (i == 1) board1 = v; else
+  if (i == 2) board2 = v; else
+  if (i == 3) board3 = v; else
+  if (i == 4) board4 = v; else
+  if (i == 5) board5 = v; else
+  if (i == 6) board6 = v; else
+  if (i == 7) board7 = v; else
+  if (i == 8) board8 = v;
+}
+
+procedure hasEmptyFields() -> bool {
+  return (
+    board0 == 0 || board1 == 0 || board2 == 0 ||
+    board3 == 0 || board4 == 0 || board5 == 0 ||
+    board6 == 0 || board7 == 0 || board8 == 0);
+}
+
+procedure checkWinner(int i, int j, int k) -> bool {
+  int player = getBoard(i);
+  if (player != 0 && player == getBoard(j) && player == getBoard(k)) {
+    return true;
+  }
+  return false;
+}
+
+message Move {
+  int pos;
+}
+
+channel execute(client who, Move move) {
+  int pos = move.pos;
+  if (nextPlayer != 0 && pos >= 0 && pos < 9 && getBoard(pos) == 0) {
+    setBoard(pos, nextPlayer);
+    // Check for victory. We could optimize this by only checking the lines that
+    // include `pos`, but with 8 total lines it's not really worth the effort.
+    if ( checkWinner(0, 1, 2)  // row 1
+      || checkWinner(3, 4, 5)  // row 2
+      || checkWinner(6, 7, 8)  // row 3
+      || checkWinner(0, 3, 6)  // column 1
+      || checkWinner(1, 4, 7)  // column 2
+      || checkWinner(2, 5, 8)  // column 3
+      || checkWinner(0, 4, 8)  // diagonal 1
+      || checkWinner(2, 4, 6)  // diagonal 2
+    ) {
+      winner = nextPlayer;
+      nextPlayer = 0;
+    } else if (hasEmptyFields()) {
+      nextPlayer = -nextPlayer;
+    } else {
+      nextPlayer = 0;
+    }
+  }
+}
+
+// TODO:
+//
+//   - separate players
+//   - allow resetting the board to play multiple games, keeping track of
+//     number of games won and lost by each player.
+//

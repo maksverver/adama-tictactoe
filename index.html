@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tic Tac Toe (powered by Adama)</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="icon" type="image/png" href="icon.png" />
+</head>
+<body>
+<svg width="100%" height="100%" viewbox="-0.5 -0.5 3 3">
+  <defs>
+    <g id="click-target">
+      <rect width="1" height="1" x="-0.5" y="-0.5"/>
+    </g>
+    <g id="mark-x">
+      <line x1="-0.3" y1="-0.3" x2="0.3" y2="0.3"/>
+      <line x1="-0.3" y1="0.3" x2="0.3" y2="-0.3"/>
+    </g>
+    <g id="mark-o">
+      <circle cx="0" cy="0" r="0.3"/>
+    </g>
+  </defs>
+  <g id="clickTargets"></g>
+  <g id="grid">
+    <line x1="-0.5" y1="0.5" x2="2.5" y2="0.5"/>
+    <line x1="-0.5" y1="1.5" x2="2.5" y2="1.5"/>
+    <line x1="0.5" y1="-0.5" x2="0.5" y2="2.5"/>
+    <line x1="1.5" y1="-0.5" x2="1.5" y2="2.5"/>
+  </g>
+  <g id="marks"></g>
+</svg>
+<script src="https://releases.adama-platform.com/libadama.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
